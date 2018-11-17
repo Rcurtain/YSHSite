@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-</head>
-<body>
-    <div>
-        <h3>个人博客网站</h3>
-    </div>
-    <hr>
+{% extends 'base.html' %}
+
+{# title #}
+{% block title%}
+    {{ 个人博客网站 }}
+{% endblock %}
+
+{% block content %}
     <p>一共有{{ blogs|length }}篇博客</p>
     {% for blog in blogs %}
         <a href="{% url 'blog_detail' blog.pk %}">
@@ -18,5 +15,4 @@
     {% empty %}
         <p>---暂无博客,敬请期待---</p>
     {% endfor %}
-</body>
-</html>
+{% endblock %}
