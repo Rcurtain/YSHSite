@@ -8,6 +8,7 @@ class BlogType(models.Model):
     def __str__(self):
         return self.type_name
 
+
 class Blog(models.Model):
     title = models.CharField(max_length = 50)
     blog_type = models.ForeignKey(BlogType, on_delete=models.DO_NOTHING)
