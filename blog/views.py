@@ -55,10 +55,15 @@ def blog_list(request):
 def blog_detail(request, blog_pk):
     context = {}
     blog = get_object_or_404(Blog, pk=blog_pk)
+    if not request.COOKIES.get("read_%s" % blog.pk):
+        blog.read_num += 1
+        blog.save()
     context['blog'] = get_object_or_404(Blog, pk=blog_pk)
     context['previous_blog'] = Blog.objects.filter(create_time__gt=blog.create_time).last()
     context['next_blog'] = Blog.objects.filter(create_time__lt=blog.create_time).first()
-    return render_to_response('blog/blog_detail.html', context)
+    response = render_to_response('blog/blog_detail.html', context)
+    response.set_cookie("read_%s" % blog.pk, "true")
+    return response
 
 
 def blogs_with_type(request, blog_type_pk):
