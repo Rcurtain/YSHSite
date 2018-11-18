@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from .models import Blog, BlogType
+from .models import Blog, BlogType, ReadNum
 from django.db.models import Count
 from django.core.paginator import Paginator
 from django.conf import settings
@@ -53,12 +53,22 @@ def blog_list(request):
 
 
 def blog_detail(request, blog_pk):
-    context = {}
     blog = get_object_or_404(Blog, pk=blog_pk)
+    if not request.COOKIES.get("blog_%s_read" % blog.pk):
+        if ReadNum.objects.filter(blog=blog).count():
+            readnum = ReadNum.objects.get(blog=blog)
+        else:
+            readnum = ReadNum(blog = blog)
+        readnum.read_num += 1
+        readnum.save()
+
+    context = {}
     context['blog'] = get_object_or_404(Blog, pk=blog_pk)
     context['previous_blog'] = Blog.objects.filter(create_time__gt=blog.create_time).last()
     context['next_blog'] = Blog.objects.filter(create_time__lt=blog.create_time).first()
-    return render_to_response('blog/blog_detail.html', context)
+    response = render_to_response('blog/blog_detail.html', context)
+    response.set_cookie("blog_%s_read" % blog.pk, "true")
+    return response
 
 
 def blogs_with_type(request, blog_type_pk):
