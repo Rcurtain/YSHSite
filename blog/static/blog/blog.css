@@ -1,4 +1,4 @@
-ul.blog-type{
+ul.blog-types {
     list-style-type: none;
 }
 div.blog:not(:last-child){
@@ -6,26 +6,27 @@ div.blog:not(:last-child){
     padding-bottom: 1em;
     border-bottom: 1px solid #eee;
 }
-div.blog h3{
+div.blog h3 {
     margin-top: 0.5em;
 }
 div.blog p.blog-info{
     margin-bottom: 0;
 }
-ul.blog-info-description{
+div.paginator {
+    text-align: center;
+}
+
+ul.blog-info-description {
     list-style-type: none;
     margin-bottom: 1em;
 }
 ul.blog-info-description li{
     display: inline-block;
-    margin-bottom: 1em;
+    margin-right: 1em;
 }
 div.blog-content{
     text-indent: 2em;
 }
-div.paginator{
-    text-align: center;
-}
-div.blog-more{
+div.blog-more {
     margin-top: 1em;
 }
