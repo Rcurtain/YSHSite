@@ -5,10 +5,12 @@ from django.utils import timezone
 from django.db.models import Sum
 from django.core.cache import cache
 from django.contrib import auth
+from django.contrib.auth.models import User
 from django.urls import reverse
 
 from read_statistics.utils import get_seven_days_read_data, get_today_hot_data, get_yesterday_hot_data
 from blog.models import Blog
+from .forms import LoginForm, RegisterForm
 
 def get_7_days_hot_blogs():
     today = timezone.now().date()
@@ -39,12 +41,35 @@ def home(request):
     return render(request, 'home.html', context)
 
 def login(request):
-    username = request.POST.get('username', '')
-    password = request.POST.get('password', '')
-    user = auth.authenticate(request, username=username, password=password)
-    referer = request.META.get('HTTP_REFERER', reverse('home'))
-    if user is not None:
-        auth.login(request, user)
-        return redirect(referer)
+    if request.method == 'POST':
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            user = login_form.cleaned_data['user']
+            auth.login(request, user)
+            return redirect(request.GET.get('from', reverse('home')))
     else:
-        return render(request, 'error.html', {'message':'用户名或密码不正确'})
+        login_form = LoginForm()
+    
+    context = {}
+    context['login_form'] = login_form
+    return render(request, 'login.html', context)
+
+def register(request):
+    if request.method == 'POST':
+        reg_form = RegisterForm(request.POST)
+        if reg_form.is_valid():
+            username = reg_form.cleaned_data['username']
+            email = reg_form.cleaned_data['email']
+            password = reg_form.cleaned_data['password']
+
+            user = User.objects.create_user(username, email, password)
+            user.save()
+
+            user = auth.authenticate(username=username, password=password)
+            auth.login(request, user)
+            return redirect(request.GET.get('from', reverse('home')))
+    else:
+        reg_form = RegisterForm()
+    context = {}
+    context['reg_form'] = reg_form
+    return render(request, 'register.html', context)
