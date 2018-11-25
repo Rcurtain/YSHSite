@@ -173,9 +173,9 @@ CKEDITOR_CONFIGS = {
 EACH_PAGE_BLOGS_NUMBER = 7
 
 # 缓存设置
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-#         'LOCATION': 'my_cache_table',
-#     }
-# }
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}
