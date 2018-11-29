@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {%load staticfiles%}
+{% load comment_tags %}
+{% load likes_tags %}
 
 {% block header_extends%}
     <link rel="stylesheet" href="{% static 'blog/blog.css' %}">
@@ -23,11 +25,11 @@
                                     {{ blog.title }}
                                     </a></h3>
                                     <p class="blog-info">
-                                        <span class="glyphicon glyphicon-tag"></span>
-                                        分类：<a href="{% url 'blog:blogs_with_type' blog.blog_type.pk %}">{{blog.blog_type}}</a>
-                                        <span class="glyphicon glyphicon-time"></span>
-                                        发表日期：{{blog.create_time|date:"Y-m-d"}}
-                                        阅读次数: {{blog.get_read_num}}
+	                                    <span class="glyphicon glyphicon-tag"></span> <a href="{% url 'blog:blogs_with_type' blog.blog_type.pk %}">{{ blog.blog_type }}</a>&nbsp;&nbsp;
+	                                    <span class="glyphicon glyphicon-time"></span> {{ blog.created_time|date:"Y-m-d" }}&nbsp;&nbsp;
+	                                    阅读({{ blog.get_read_num }})&nbsp;&nbsp;
+	                                    评论({% get_comment_count blog %})&nbsp;&nbsp;
+	                                    点赞({% get_like_count blog %})
                                     </p>
                                     <p>{{ blog.content | truncatewords:30 }}</p>    
                                 </div>
