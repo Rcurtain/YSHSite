@@ -27,10 +27,11 @@ def update_comment(request):
         data['username'] = comment.user.username
         data['comment_time'] = comment.comment_time.timestamp()
         data['text'] = comment.text
-        if parent is None:
-            data['reply_to'] = ''
-        else:
+        data['content_type'] = ContentType.objects.get_for_model(comment).model
+        if not parent is None:
             data['reply_to'] = comment.reply_to.username
+        else:
+            data['reply_to'] = ''
         data['pk'] = comment.pk
         data['root_pk'] = comment.root.pk if not comment.root is None else ''
     else:

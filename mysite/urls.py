@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import home, login, register
+from .views import home, login, register, login_for_medal
 
 urlpatterns = [
     path('', home, name='home'),
@@ -27,6 +27,7 @@ urlpatterns = [
     path('comment/', include("comment.urls")),
     path('likes/', include('likes.urls')),
     path('login/', login, name='login'),
+    path('login_for_medal/', login_for_medal, name='login_for_medal'),
     path('register/', register, name='register'),
 ]
 
